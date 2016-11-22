@@ -3,7 +3,7 @@
 import cv2.cv as cv
 import serial
 
-ser = serial.Serial("/dev/tty50",9600)
+#ser = serial.Serial("/dev/ttyACM0",9600)
 
 def is_rect_nonzero(r):
     (_,_,w,h) = r
@@ -69,6 +69,7 @@ class CamShiftDemo:
             #print x
             #x = x + 1
             frame = cv.QueryFrame( self.capture )
+            cv.Flip(frame, frame, 1)
 
             # Convert to HSV and keep the hue
             hsv = cv.CreateImage(cv.GetSize(frame), 8, 3)
@@ -83,20 +84,22 @@ class CamShiftDemo:
             cv.CalcArrBackProject( [self.hue], backproject, hist )
             if self.track_window and is_rect_nonzero(self.track_window):
                 crit = ( cv.CV_TERMCRIT_EPS | cv.CV_TERMCRIT_ITER, 10, 1)
+                print self.track_window
                 (iters, (area, value, rect), track_box) = cv.CamShift(backproject, self.track_window, crit)
                 self.track_window = rect
+                print self.track_window
             try:
                 #prints the center x and y value of the tracked ellipse
                 coord = track_box[0]
                 print "center = {}".format(coord)
                 if (coord[0] < 320):
                     print "move right"
-                    ser.write("R")
+                   # ser.write("R")
                 elif (coord[0] == 320):
                     print "do nothing"
                 else:
                     print "move left"
-                    ser.write("L")
+                   # ser.write("L")
             except UnboundLocalError:
                 print "track_box is None"
 
@@ -118,6 +121,7 @@ class CamShiftDemo:
                 if max_val != 0:
                     cv.ConvertScale(hist.bins, hist.bins, 255. / max_val)
             elif self.track_window and is_rect_nonzero(self.track_window):
+                print track_box
                 cv.EllipseBox( frame, track_box, cv.CV_RGB(255,0,0), 3, cv.CV_AA, 0 )
 
 

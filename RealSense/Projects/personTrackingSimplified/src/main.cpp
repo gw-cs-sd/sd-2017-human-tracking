@@ -1,12 +1,3 @@
-	/*******************************************************************************
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-This software is supplied under the terms of a license agreement or nondisclosure
-agreement with Intel Corporation and may not be copied or disclosed except in
-accordance with the terms of that agreement
-Copyright(c) 2012-2013 Intel Corporation. All Rights Reserved.
-
-*******************************************************************************/
 #include <Windows.h>
 #include <WindowsX.h>
 #include <commctrl.h>
@@ -22,15 +13,18 @@ Copyright(c) 2012-2013 Intel Corporation. All Rights Reserved.
 #include "PersonTrackingFrameRateCalculator.h"
 #include "PersonTrackingRendererManager.h"
 #include "PersonTrackingRenderer2D.h"
-#include "PersonTrackingRenderer3D.h"
+//#include "PersonTrackingRenderer3D.h"
 #include "PersonTrackingUtilities.h"
 #include "PersonTrackingProcessor.h"
 #include "ProfileSetMap.h"
 
 pxcCHAR fileName[1024] = { 0 };
 PXCSession* session = NULL;
+//helps inr rendering the output
 PersonTrackingRendererManager* renderer = NULL;
+//processes the visual feed?
 PersonTrackingProcessor* processor = NULL;
+
 ProfileSetMap* profileSetMap = NULL;
 HANDLE ghMutex;
 
@@ -39,19 +33,29 @@ volatile bool isStopped = false;
 volatile bool isActiveApp = true;
 
 
-static int controls[] = { IDC_SCALE, IDC_SEGMENT, /*IDC_MIRROR,*/ IDC_LOCATION, ID_START, ID_STOP, IDC_BLOB, IDC_RECOGNITION, ID_REGISTER, ID_UNREGISTER, 
-						  ID_TRACK, ID_UNTRACK, /* IDC_HEAD  ,*/ IDC_SKELETON, /*IDC_GESTURE, IDC_EXPRESSIONS,*/ IDC_IDINPUT, /*IDC_INTERACTIVE_MODE,*/ IDC_FRAMENUM_TEXT, IDC_FRAMENUM,
-						  IDC_STARTFRAMENUM_INPUT, IDC_START_FROM_FRAME_NB, IDC_EXPRESSIONS, IDC_HEADPOSE };
-static RECT layout[3 + sizeof(controls) / sizeof(controls[0])];
+//IDC means a button. The C stands for control in Windows, and a button is a control so the prefix IDC is attached
+
+/*static int controls[] = { IDC_SCALE, IDC_SEGMENT, IDC_MIRROR, IDC_LOCATION, ID_START, ID_STOP, IDC_BLOB, IDC_RECOGNITION, ID_REGISTER, ID_UNREGISTER, 
+						  ID_TRACK, ID_UNTRACK,  IDC_HEAD  , IDC_SKELETON, IDC_GESTURE, IDC_EXPRESSIONS, IDC_IDINPUT, IDC_INTERACTIVE_MODE, IDC_FRAMENUM_TEXT, IDC_FRAMENUM,
+						  IDC_STARTFRAMENUM_INPUT, IDC_START_FROM_FRAME_NB, IDC_EXPRESSIONS, IDC_HEADPOSE };*/
+//static RECT layout[3 + sizeof(controls) / sizeof(controls[0])];
 
 
 void PopulateDevice(HMENU menu)
 {
 	PXCSession::ImplDesc desc;
-	memset(&desc, 0, sizeof(desc)); 
+	//fills a block of memory
+	memset(&desc, 0, sizeof(desc));
+
+	//ImplGroup organizes the algorithm implementations into major groups
 	desc.group = PXCSession::IMPL_GROUP_SENSOR;
+	//our subgroup algorithm implementation is part of vdeo capture
 	desc.subgroup = PXCSession::IMPL_SUBGROUP_VIDEO_CAPTURE;
+
+	//HHMenu is how windows (OS) creates visual windows
 	HMENU menu1 = CreatePopupMenu();
+
+	//finds all the devices?? Not sure where DEVICEX comes froms
 	for (int i = 0, k = ID_DEVICEX; ; ++i)
 	{
 		PXCSession::ImplDesc desc1;
@@ -76,39 +80,43 @@ void PopulateDevice(HMENU menu)
 
 void SaveLayout(HWND dialogWindow) 
 {
-	GetClientRect(dialogWindow, &layout[0]);
-	ClientToScreen(dialogWindow, (LPPOINT)&layout[0].left);
-	ClientToScreen(dialogWindow, (LPPOINT)&layout[0].right);
-	GetWindowRect(GetDlgItem(dialogWindow, IDC_PANEL), &layout[1]);
-	GetWindowRect(GetDlgItem(dialogWindow, IDC_STATUS), &layout[2]);
-	for (int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i)
-		GetWindowRect(GetDlgItem(dialogWindow, controls[i]), &layout[3 + i]);
+	//retrieves thec coordinates of a windows client ares...upper-left is (0,0)
+	//GetClientRect(dialogWindow, &layout[0]);
+	//converts coordinates relative to our app to actual on-screen coordinates
+	//ClientToScreen(dialogWindow, (LPPOINT)&layout[0].left);
+	//ClientToScreen(dialogWindow, (LPPOINT)&layout[0].right);
+	//gets coordinate points of thes specific dialog box, IDC panel
+	//GetWindowRect(GetDlgItem(dialogWindow, IDC_PANEL), &layout[1]);
+	//GetWindowRect(GetDlgItem(dialogWindow, IDC_STATUS), &layout[2]);
+	//for (int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i)
+	//	GetWindowRect(GetDlgItem(dialogWindow, controls[i]), &layout[3 + i]);
 }
 
 void RedoLayout(HWND dialogWindow)
 {
+	//displays the elements in the menu screen
 	RECT rectangle;
 	GetClientRect(dialogWindow, &rectangle);
 
 	/* Status */
-	SetWindowPos(GetDlgItem(dialogWindow, IDC_STATUS), dialogWindow, 
+	/*SetWindowPos(GetDlgItem(dialogWindow, IDC_STATUS), dialogWindow, 
 		0,
 		rectangle.bottom - (layout[2].bottom - layout[2].top),
 		rectangle.right - rectangle.left,
 		(layout[2].bottom - layout[2].top),
-		SWP_NOZORDER);
+		SWP_NOZORDER);*/
 
 	/* Panel */
-	SetWindowPos(
+	/*SetWindowPos(
 		GetDlgItem(dialogWindow,IDC_PANEL), dialogWindow,
 		(layout[1].left - layout[0].left),
 		(layout[1].top - layout[0].top),
 		rectangle.right - (layout[1].left-layout[0].left) - (layout[0].right - layout[1].right),
 		rectangle.bottom - (layout[1].top - layout[0].top) - (layout[0].bottom - layout[1].bottom),
-		SWP_NOZORDER);
+		SWP_NOZORDER);*/
 
 	/* Buttons & CheckBoxes */
-	for (int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i)
+	/*for (int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i)
 	{
 		SetWindowPos(
 			GetDlgItem(dialogWindow,controls[i]), dialogWindow,
@@ -117,7 +125,7 @@ void RedoLayout(HWND dialogWindow)
 			(layout[3 + i].right - layout[3 + i].left),
 			(layout[3 + i].bottom - layout[3 + i].top),
 			SWP_NOZORDER);
-	}
+	}*/
 }
 
 static DWORD WINAPI RenderingThread(LPVOID arg)
@@ -143,8 +151,8 @@ INT_PTR CALLBACK MessageLoopThread(HWND dialogWindow, UINT message, WPARAM wPara
 	switch (message) 
 	{ 
 	case WM_INITDIALOG:
-		PopulateDevice(menu1);
-		CheckDlgButton(dialogWindow, IDC_SCALE, BST_CHECKED);
+		//PopulateDevice(menu1);
+		/*CheckDlgButton(dialogWindow, IDC_SCALE, BST_CHECKED);
 		CheckDlgButton(dialogWindow, IDC_LOCATION, BST_CHECKED);
 		Button_Enable(GetDlgItem(dialogWindow, IDC_SEGMENT), true);
 		Button_Enable(GetDlgItem(dialogWindow, IDC_SKELETON), true);
@@ -156,7 +164,7 @@ INT_PTR CALLBACK MessageLoopThread(HWND dialogWindow, UINT message, WPARAM wPara
 		Edit_SetText(GetDlgItem(dialogWindow, IDC_STARTFRAMENUM_INPUT), L"0");
 
 		SaveLayout(dialogWindow);
-		return TRUE; 
+		return TRUE; */
 
 	case WM_COMMAND: 
 		menu2 = GetSubMenu(menu1, PersonTrackingUtilities::DEVICE_MENU_POSITION);
@@ -267,6 +275,7 @@ INT_PTR CALLBACK MessageLoopThread(HWND dialogWindow, UINT message, WPARAM wPara
 
 				if (PersonTrackingUtilities::IsModuleSelected(dialogWindow, IDC_RECOGNITION))
 				{
+					//enables or disables the button based on the 2nd parameter
 					Button_Enable(GetDlgItem(dialogWindow, ID_REGISTER), false);
 					Button_Enable(GetDlgItem(dialogWindow, ID_UNREGISTER), false);
 				}

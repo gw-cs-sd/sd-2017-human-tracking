@@ -15,6 +15,7 @@
 #include <assert.h>
 #include "myPerson.h"
 
+<<<<<<< HEAD
 /* Required for ouputting data to file */
 #include <iostream>
 #include <fstream>
@@ -30,6 +31,8 @@ using namespace std;
 
 
 
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 PXCSession *session = NULL;
 
 /* Variables needed to compile */
@@ -41,16 +44,20 @@ volatile bool isStopped = false;
 myPerson targetUser;
 bool isInitialized = false;
 
+<<<<<<< HEAD
 /* Global variables for logging joint data */
 char separator = ' ';
 int timeCounter = 0;
 ofstream outputFile;
 
 
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 /* Method declarations */
 void initializeTargetUser(PXCPersonTrackingModule* personModule);
 boolean isJointInfoValid(PXCPersonTrackingData::PersonJoints::SkeletonPoint* joints);
 void comparePeopleInFOV(PXCPersonTrackingModule* personModule, int numPeople);
+<<<<<<< HEAD
 myPerson convertPXCPersonToMyPerson(PXCPersonTrackingData::Person* person);
 
 void createLogFile(string fileName);
@@ -62,6 +69,12 @@ int main(int argc, WCHAR* argv[]) {
 	/* Setting up log file */
 	//createLogFile("pointLogs/pointLog8.txt");
 	
+=======
+
+
+
+int main(int argc, WCHAR* argv[]) {
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 	/* Creates an instance of the PXCSenseManager */
 	PXCSenseManager *pp = PXCSenseManager::CreateInstance();
 
@@ -70,6 +83,7 @@ int main(int argc, WCHAR* argv[]) {
 		return 3;
 	}
 
+<<<<<<< HEAD
 	/* Initiates session */
 	session = pp->QuerySession();
 	
@@ -88,6 +102,11 @@ int main(int argc, WCHAR* argv[]) {
 		printf("OpenCV mode unsuccessful...\n");
 	}
 
+=======
+	/* Enables person tracking module */
+	session = pp->QuerySession();
+	pp->EnablePersonTracking();
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 
 	/* Creates stream renders */
 	UtilRender renderc(L"Color"), renderd(L"Depth");
@@ -161,11 +180,15 @@ int main(int argc, WCHAR* argv[]) {
 					/* Initializing target user */
 					if (isInitialized == false) {
 						initializeTargetUser(personModule);
+<<<<<<< HEAD
 						//printf("Still initializing user...\n");
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 
 					}
 					/* Comparing people in FOV against target user */
 					else {
+<<<<<<< HEAD
 						//comparePeopleInFOV(personModule, numPeople);
 						/* Person initialized, time to gather data */
 						if (timeCounter < 500) {
@@ -175,6 +198,12 @@ int main(int argc, WCHAR* argv[]) {
 							//timeCounter++; it increases inside a convertPXCPersonToMyPerson
 						}
 					}
+=======
+						comparePeopleInFOV(personModule, numPeople);
+					//	myPerson found; //this person's tracked values will be closest to user's, location will be outputted to microcontroller (or some other function or some shit)
+					}
+
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 				}
 			}
 
@@ -195,7 +224,10 @@ int main(int argc, WCHAR* argv[]) {
 
 	// Clean Up
 	pp->Release();
+<<<<<<< HEAD
 	outputFile.close();
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 	return 0;
 }
 
@@ -224,6 +256,7 @@ void initializeTargetUser(PXCPersonTrackingModule* personModule) {
 	/* Joint info is valid, initialize target user */
 	else {
 		printf("Initializing target user...\n");
+<<<<<<< HEAD
 		myPoint leftHand      (joints[0].world.x, joints[0].world.y, joints[0].world.z, joints[0].image.x, joints[0].image.y);
 		myPoint rightHand     (joints[1].world.x, joints[1].world.y, joints[1].world.z, joints[1].image.x, joints[1].image.y);
 		myPoint head          (joints[2].world.x, joints[2].world.y, joints[2].world.z, joints[2].image.x, joints[2].image.y);
@@ -235,6 +268,15 @@ void initializeTargetUser(PXCPersonTrackingModule* personModule) {
 		myPoint myCenterMass(centerMass.world.point.x, centerMass.world.point.y, centerMass.world.point.z, centerMass.image.point.x, centerMass.image.point.y);
 		
 		targetUser.changeJoints(head, shoulderLeft, shoulderRight, leftHand, rightHand, spineMid, myCenterMass);
+=======
+		myPoint leftHand(joints[0].world.x, joints[0].world.y, joints[0].world.z, joints[0].image.x, joints[0].image.y);
+		myPoint rightHand(joints[1].world.x, joints[1].world.y, joints[1].world.z, joints[1].image.x, joints[1].image.y);
+		myPoint head(joints[2].world.x, joints[2].world.y, joints[2].world.z, joints[2].image.x, joints[2].image.y);
+		myPoint shoulderLeft(joints[3].world.x, joints[3].world.y, joints[3].world.z, joints[3].image.x, joints[3].image.y);
+		myPoint shoulderRight(joints[4].world.x, joints[4].world.y, joints[4].world.z, joints[4].image.x, joints[4].image.y);
+		myPoint spineMid(joints[5].world.x, joints[5].world.y, joints[5].world.z, joints[5].image.x, joints[5].image.y);
+		targetUser.updateJoints(head, shoulderLeft, shoulderRight, leftHand, rightHand, spineMid);
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 		targetUser.printPerson();
 		isInitialized = true;
 	}
@@ -284,14 +326,18 @@ void comparePeopleInFOV(PXCPersonTrackingModule* personModule, int numPeople) {
 		PXCPersonTrackingData::PersonJoints::SkeletonPoint* joints = new PXCPersonTrackingData::PersonJoints::SkeletonPoint[personJoints->QueryNumJoints()];
 		personJoints->QueryJoints(joints);
 
+<<<<<<< HEAD
 		PXCPersonTrackingData::PersonTracking::PointCombined centerMass = personData->QueryTracking()->QueryCenterMass();
 		myPoint myCenterMass(centerMass.world.point.x, centerMass.world.point.y, centerMass.world.point.z, centerMass.image.point.x, centerMass.image.point.y);
 
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 
 		if (isJointInfoValid(joints) == false) {
 			//printf("Invalid joint data...\n");
 		}
 		else {
+<<<<<<< HEAD
 			myPoint leftHand        (joints[0].world.x, joints[0].world.y, joints[0].world.z, joints[0].image.x, joints[0].image.y);
 			myPoint rightHand       (joints[1].world.x, joints[1].world.y, joints[1].world.z, joints[1].image.x, joints[1].image.y);
 			myPoint head            (joints[2].world.x, joints[2].world.y, joints[2].world.z, joints[2].image.x, joints[2].image.y);
@@ -301,12 +347,22 @@ void comparePeopleInFOV(PXCPersonTrackingModule* personModule, int numPeople) {
 
 
 			myPerson curr = myPerson(head, shoulderLeft, shoulderRight, leftHand, rightHand, spineMid, myCenterMass);
+=======
+			myPoint leftHand     (joints[0].world.x, joints[0].world.y, joints[0].world.z, joints[0].image.x, joints[0].image.y);
+			myPoint rightHand    (joints[1].world.x, joints[1].world.y, joints[1].world.z, joints[1].image.x, joints[1].image.y);
+			myPoint head         (joints[2].world.x, joints[2].world.y, joints[2].world.z, joints[2].image.x, joints[2].image.y);
+			myPoint leftShoulder (joints[3].world.x, joints[3].world.y, joints[3].world.z, joints[3].image.x, joints[3].image.y);
+			myPoint rightShoulder(joints[4].world.x, joints[4].world.y, joints[4].world.z, joints[4].image.x, joints[4].image.y);
+			myPoint spineMid     (joints[5].world.x, joints[5].world.y, joints[5].world.z, joints[5].image.x, joints[5].image.y);
+			myPerson curr = myPerson(head, leftShoulder, rightShoulder, leftHand, rightHand, spineMid);
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
 			//curr.printPerson(); //can implement while testing
 			double currConf = compareTorsoAndArmLengths(curr, targetUser); //confidence that current person is user
 			printf("%d. Similarity = %.2f\n", perIter, currConf);
 
 		}
 	}
+<<<<<<< HEAD
 }
 
 void createLogFile(string string) {
@@ -385,3 +441,6 @@ myPerson convertPXCPersonToMyPerson(PXCPersonTrackingData::Person* personData) {
 	return newPerson;
 
 }
+=======
+}
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e

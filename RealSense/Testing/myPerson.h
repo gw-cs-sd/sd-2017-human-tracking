@@ -11,17 +11,33 @@ int personCounter = 0; //global variable, increments for each new person constru
 
 class myPerson {
 	private:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		int initializeCount;
 		int personID; //unneccessary using my method
 		double shoulderDistance, leftArmLength, rightArmLength, torsoHeight; //raw shoulder values
 		//double shoulderDistanceSum, leftArmLengthSum, rightArmLengthSum, rightArmLengthSum; //continuosly updated distance values. Refined over multiple iterations
 
+<<<<<<< HEAD
+=======
+=======
+		int personID;
+		double shoulderDistance, leftArmLength, rightArmLength;
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		myPoint JOINT_HEAD;
 		myPoint JOINT_SHOULDER_LEFT;
 		myPoint JOINT_SHOULDER_RIGHT;
 		myPoint JOINT_HAND_LEFT;
 		myPoint JOINT_HAND_RIGHT;
 		myPoint JOINT_SPINE_MID;
+<<<<<<< HEAD
+		myPoint JOINT_CENTER_MASS;
+		vector<double> torsoHeightVector;
+=======
+<<<<<<< HEAD
 		myPoint JOINT_CENTER_MASS;
 		vector<double> torsoHeightVector;
 
@@ -29,13 +45,32 @@ class myPerson {
 		//Primary Constructor
 		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 				myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass, boolean isTargetUser) {
+=======
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+
+	public: 
+		//Primary Constructor
+		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
+<<<<<<< HEAD
+				myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass, boolean isTargetUser) {
+=======
+				myPoint lHand, myPoint rHand, myPoint midSpine) {
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			JOINT_HEAD = head;
 			JOINT_SHOULDER_LEFT = lShoulder;
 			JOINT_SHOULDER_RIGHT = rShoulder;
 			JOINT_HAND_LEFT = lHand;
 			JOINT_HAND_RIGHT = rHand;
 			JOINT_SPINE_MID = midSpine;
+<<<<<<< HEAD
 			JOINT_CENTER_MASS = cMass;
+=======
+<<<<<<< HEAD
+			JOINT_CENTER_MASS = cMass;
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			personID = personCounter++;
 			shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
 			leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT);
@@ -47,6 +82,27 @@ class myPerson {
 				torsoHeightVector.push_back(torsoHeight);
 			}
 
+<<<<<<< HEAD
+=======
+		}
+		//Default Constructor, sets all members to 0
+		myPerson() {
+			myPoint head, lShoulder, rShoulder, lHand, rHand, midSpine, cMass;
+			JOINT_HEAD = head;
+			JOINT_SHOULDER_LEFT = lShoulder;
+			JOINT_SHOULDER_RIGHT = rShoulder;
+			JOINT_HAND_LEFT = lHand;
+			JOINT_HAND_RIGHT = rHand;
+			JOINT_SPINE_MID = midSpine;
+			JOINT_CENTER_MASS = cMass;
+			
+			personID = personCounter++;
+			shoulderDistance = 0;
+			leftArmLength = 0;
+			rightArmLength = 0;
+			torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
+
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		}
 		//Default Constructor, sets all members to 0
 		myPerson() {
@@ -67,7 +123,16 @@ class myPerson {
 
 		}
 		void printPerson();
+<<<<<<< HEAD
 		void changeJoints(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
+=======
+<<<<<<< HEAD
+		void changeJoints(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
+		double calculateDistance(myPoint, myPoint);
+		myPoint calculateMidpoint(myPoint, myPoint);
+=======
+		void updateJoints(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		double calculateDistance(myPoint, myPoint);
 		myPoint calculateMidpoint(myPoint, myPoint);
 
@@ -80,20 +145,44 @@ class myPerson {
 		myPoint getHead() { return JOINT_HEAD; }
 		myPoint getLeftShoulder() { return JOINT_SHOULDER_LEFT; }
 		myPoint getRightShoulder() { return JOINT_SHOULDER_RIGHT; }
+<<<<<<< HEAD
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+
+		double getLeftArmLength() { return leftArmLength; }
+		double getRightArmLength() { return rightArmLength; }
+		double getTorso() { return torsoHeight; }
+		double getArmLength();
+		int getInitializeCount() { return initializeCount; }
+
+		myPoint getHead() { return JOINT_HEAD; }
+		myPoint getLeftShoulder() { return JOINT_SHOULDER_LEFT; }
+		myPoint getRightShoulder() { return JOINT_SHOULDER_RIGHT; }
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		myPoint getLeftHand() { return JOINT_HAND_LEFT; }
 		myPoint getRightHand() { return JOINT_HAND_RIGHT; }
 		myPoint getSpineMid() { return JOINT_SPINE_MID; }
 		myPoint getCenterMass() { return JOINT_CENTER_MASS; }
 };
 
+<<<<<<< HEAD
 /* Changes the joints for a person and the respective distance calculations */
 void myPerson::changeJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass, boolean isTargetUser) {
+=======
+<<<<<<< HEAD
+/* Changes the joints for a person and the respective distance calculations */
+void myPerson::changeJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass, boolean isTargetUser) {
+=======
+void myPerson::updateJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine) {
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 	JOINT_HEAD = head;
 	JOINT_SHOULDER_LEFT = lShoulder;
 	JOINT_SHOULDER_RIGHT = rShoulder;
 	JOINT_HAND_LEFT = lHand;
 	JOINT_HAND_RIGHT = rHand;
 	JOINT_SPINE_MID = midSpine;
+<<<<<<< HEAD
 	JOINT_CENTER_MASS = cMass;
 
 	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
@@ -102,6 +191,21 @@ void myPerson::changeJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 	torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
 
 }
+=======
+<<<<<<< HEAD
+	JOINT_CENTER_MASS = cMass;
+
+	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
+	leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT);
+	rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT);
+	torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
+
+}
+=======
+
+	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 
  /* Changes the joints of the person, recalculates distances, and replaces distances with the median if it is the target user */
 void myPerson::updatePerson(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine, boolean isTargetUser) {
@@ -128,6 +232,10 @@ void myPerson::printPerson() {
 	printf("    JOINT_SHOULDER_LEFT:  "); JOINT_SHOULDER_LEFT.printPoint();
 	printf("    JOINT_SHOULDER_RIGHT: "); JOINT_SHOULDER_RIGHT.printPoint();
 	printf("    JOINT_HAND_LEFT:      "); JOINT_HAND_LEFT.printPoint();
+<<<<<<< HEAD
+	printf("    JOINT_HAND_RIGHT:     "); JOINT_HAND_RIGHT.printPoint();
+=======
+<<<<<<< HEAD
 	printf("    JOINT_HAND_RIGHT:     "); JOINT_HAND_RIGHT.printPoint();
 	printf("    JOINT_SPINE_MID:      "); JOINT_SPINE_MID.printPoint();
 	printf("    JOINT_CENTER_MASS:    "); JOINT_CENTER_MASS.printPoint();
@@ -136,6 +244,20 @@ void myPerson::printPerson() {
 	printf("    leftArmLength:        %.2f\n", leftArmLength);
 	printf("    rightArmLength:       %.2f\n", rightArmLength);
 	printf("    torsoHeight:          %.2f\n", torsoHeight);
+=======
+	printf("    JOINT_FOOT_RIGHT:     "); JOINT_HAND_RIGHT.printPoint();
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+	printf("    JOINT_SPINE_MID:      "); JOINT_SPINE_MID.printPoint();
+	printf("    JOINT_CENTER_MASS:    "); JOINT_CENTER_MASS.printPoint();
+	printf("  Calculated Features:\n");
+	printf("    shoulderDistance:     %.2f\n", shoulderDistance);
+<<<<<<< HEAD
+	printf("    leftArmLength:        %.2f\n", leftArmLength);
+	printf("    rightArmLength:       %.2f\n", rightArmLength);
+	printf("    torsoHeight:          %.2f\n", torsoHeight);
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 
 
 }

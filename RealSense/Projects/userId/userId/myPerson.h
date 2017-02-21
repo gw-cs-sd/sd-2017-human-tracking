@@ -9,11 +9,19 @@
 #define RATIO_EXP_DECAY 2.31 //experimentally generated value
 #define VAL_EXP_DECAY 0.15
 
+<<<<<<< HEAD
 #define INITIALIZE_COUNT_MAX 10 //number of iterations before target is initialized
 
 
 using namespace std; //needed for using the vector
 
+=======
+<<<<<<< HEAD
+#define INITIALIZE_COUNT_MAX 10 //number of iterations before target is initialized
+
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 int personCounter = 0; //global variable, increments for each new person constructed
 
 /* Function declarations */
@@ -34,17 +42,31 @@ ofstream zAxisLog;*/
 
 class myPerson{
 	private:
+<<<<<<< HEAD
 		int initializeCount;
 		int personID; //unneccessary using my method
 		double shoulderDistance, leftArmLength, rightArmLength, torsoHeight; //raw shoulder values
 		//double shoulderDistanceSum, leftArmLengthSum, rightArmLengthSum, rightArmLengthSum; //continuosly updated distance values. Refined over multiple iterations
 
+=======
+<<<<<<< HEAD
+		int initializeCount;
+		int personID; //unneccessary using my method
+		double shoulderDistance, leftArmLength, rightArmLength, torsoHeight; //raw shoulder values
+		//double shoulderDistanceSum, leftArmLengthSum, rightArmLengthSum, rightArmLengthSum; //continuosly updated distance values. Refined over multiple iterations
+
+=======
+		int personID; //unneccessary using my method
+		double shoulderDistance, leftArmLength, rightArmLength, torsoHeight;
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		myPoint JOINT_HEAD;
 		myPoint JOINT_SHOULDER_LEFT;
 		myPoint JOINT_SHOULDER_RIGHT;
 		myPoint JOINT_HAND_LEFT;
 		myPoint JOINT_HAND_RIGHT;
 		myPoint JOINT_SPINE_MID;
+<<<<<<< HEAD
 		myPoint JOINT_CENTER_MASS;
 
 		/* Vectors used for keeping track of user history */
@@ -57,12 +79,27 @@ class myPerson{
 		//Primary Constructor
 		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 				myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
+=======
+<<<<<<< HEAD
+		myPoint JOINT_CENTER_MASS;
+	public: 
+		//Primary Constructor
+		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
+				myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
+=======
+	public: 
+		//Primary Constructor
+		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
+				myPoint lHand, myPoint rHand, myPoint midSpine) {
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			JOINT_HEAD = head;
 			JOINT_SHOULDER_LEFT = lShoulder;
 			JOINT_SHOULDER_RIGHT = rShoulder;
 			JOINT_HAND_LEFT = lHand;
 			JOINT_HAND_RIGHT = rHand;
 			JOINT_SPINE_MID = midSpine;
+<<<<<<< HEAD
 			JOINT_CENTER_MASS = cMass;
 			personID = personCounter++;
 
@@ -77,20 +114,69 @@ class myPerson{
 		//Default Constructor, sets all members to 0
 		myPerson() {
 			myPoint head, lShoulder, rShoulder, lHand, rHand, midSpine, cMass;
+=======
+<<<<<<< HEAD
+			JOINT_CENTER_MASS = cMass;
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+			personID = personCounter++;
+			shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
+			leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT);
+			rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT);
+			torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
+<<<<<<< HEAD
+
+		}
+		//Default Constructor, sets all members to 0
+		myPerson() {
+			myPoint head, lShoulder, rShoulder, lHand, rHand, midSpine, cMass;
+=======
+		}
+		//Default Constructor, sets all members to 0
+		myPerson() {
+			myPoint head, lShoulder, rShoulder, lHand, rHand, midSpine;
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			JOINT_HEAD = head;
 			JOINT_SHOULDER_LEFT = lShoulder;
 			JOINT_SHOULDER_RIGHT = rShoulder;
 			JOINT_HAND_LEFT = lHand;
+<<<<<<< HEAD
 			JOINT_HAND_RIGHT = rHand;
 			JOINT_SPINE_MID = midSpine;
 			JOINT_CENTER_MASS = cMass;
+=======
+<<<<<<< HEAD
+			JOINT_HAND_RIGHT = rHand;
+			JOINT_SPINE_MID = midSpine;
+			JOINT_CENTER_MASS = cMass;
+=======
+			JOINT_HAND_RIGHT = rShoulder;
+			JOINT_SPINE_MID = midSpine;
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			
 			personID = personCounter++;
 			shoulderDistance = 0;
 			leftArmLength = 0;
 			rightArmLength = 0;
+<<<<<<< HEAD
 			torsoHeight = 0;
 
+=======
+<<<<<<< HEAD
+			torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID, 0);
+
+		}
+		void printPerson();
+		void changeJoints(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
+		void updatePerson(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
+		double calculateDistance(myPoint, myPoint, double);
+		myPoint calculateMidpoint(myPoint, myPoint);
+
+=======
+			torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 
 		}
 		//method declaration
@@ -99,7 +185,13 @@ class myPerson{
 		void updatePerson(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
 		double calculateDistance(myPoint, myPoint, double);
 		myPoint calculateMidpoint(myPoint, myPoint);
+<<<<<<< HEAD
 		//accessor methods
+=======
+		myPoint getLeftShoulder() { return JOINT_SHOULDER_LEFT; }
+		myPoint getRightShoulder() { return JOINT_SHOULDER_RIGHT; }
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		double getLeftArmLength() { return leftArmLength; }
 		double getRightArmLength() { return rightArmLength; }
 		double getTorso() { return torsoHeight; }
@@ -121,6 +213,16 @@ class myPerson{
 		double getMedianLeftArmLength();
 		double getMedianRightArmLength();
 		double getArmLength();
+<<<<<<< HEAD
+		int getInitializeCount() { return initializeCount; }
+
+		myPoint getHead() { return JOINT_HEAD; }
+		myPoint getLeftShoulder() { return JOINT_SHOULDER_LEFT; }
+		myPoint getRightShoulder() { return JOINT_SHOULDER_RIGHT; }
+		myPoint getLeftHand() { return JOINT_HAND_LEFT; }
+		myPoint getRightHand() { return JOINT_HAND_RIGHT; }
+		myPoint getSpineMid() { return JOINT_SPINE_MID; }
+		myPoint getCenterMass() { return JOINT_CENTER_MASS; }
 };
 
 /* Changes the joints for a person and the respective distance calculations */
@@ -131,6 +233,36 @@ void myPerson::changeJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 	JOINT_HAND_LEFT = lHand;
 	JOINT_HAND_RIGHT = rHand;
 	JOINT_SPINE_MID = midSpine;
+	JOINT_CENTER_MASS = cMass;
+
+	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT, 0);
+	leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT, 0);
+	rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT, 0);
+	torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID, 0);
+
+
+
+}
+
+/* Updates the joints of the person, but recalculates */
+void myPerson::updatePerson(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
+=======
+};
+
+<<<<<<< HEAD
+/* Changes the joints for a person and the respective distance calculations */
+void myPerson::changeJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
+=======
+void myPerson::updateJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine) {
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+	JOINT_HEAD = head;
+	JOINT_SHOULDER_LEFT = lShoulder;
+	JOINT_SHOULDER_RIGHT = rShoulder;
+	JOINT_HAND_LEFT = lHand;
+	JOINT_HAND_RIGHT = rHand;
+	JOINT_SPINE_MID = midSpine;
+<<<<<<< HEAD
 	JOINT_CENTER_MASS = cMass;
 
 	double medianZ = findMedianForZ(head, lShoulder, rShoulder, lHand, rHand, midSpine, cMass);
@@ -163,6 +295,19 @@ void myPerson::updatePerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 	leftArmVector.push_back(leftArmLength);
 	rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT, medianZ);
 	rightArmVector.push_back(rightArmLength);
+=======
+<<<<<<< HEAD
+	JOINT_CENTER_MASS = cMass;
+
+	/* Calculate the distances between joints, add to respective vector */
+=======
+
+	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
+	leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT);
+	rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT);
+	torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 
 }
 
@@ -175,7 +320,14 @@ void myPerson::printPerson() {
 	printf("    JOINT_HAND_LEFT:      "); JOINT_HAND_LEFT.printPoint();
 	printf("    JOINT_HAND_RIGHT:     "); JOINT_HAND_RIGHT.printPoint();
 	printf("    JOINT_SPINE_MID:      "); JOINT_SPINE_MID.printPoint();
+<<<<<<< HEAD
 	printf("    JOINT_CENTER_MASS:    "); JOINT_CENTER_MASS.printPoint();
+=======
+<<<<<<< HEAD
+	printf("    JOINT_CENTER_MASS:    "); JOINT_CENTER_MASS.printPoint();
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 	printf("  Calculated Features:\n");
 	printf("    shoulderDistance:     %.2f\n", shoulderDistance);
 	printf("    leftArmLength:        %.2f\n", leftArmLength);
@@ -185,6 +337,7 @@ void myPerson::printPerson() {
 
 }
 
+<<<<<<< HEAD
 /* We are assumming all joints are on the same z plane. Will need to implement the trig here */
 double myPerson::calculateDistance(myPoint point1, myPoint point2, double medianZ) { //order of params doesn't matter
 	//double difX = point1.getWorldX() - point2.getWorldX();
@@ -195,6 +348,18 @@ double myPerson::calculateDistance(myPoint point1, myPoint point2, double median
 	double difY = point1.getImageY() - point2.getImageY();
 	double sumXY = pow(difX, 2) + pow(difY, 2);
 	return sqrt(sumXY);
+=======
+<<<<<<< HEAD
+double myPerson::calculateDistance(myPoint point1, myPoint point2, double medianZ) { //order of params doesn't matter
+=======
+double myPerson::calculateDistance(myPoint point1, myPoint point2) { //order of params doesn't matter
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+	double difX = point1.getWorldX() - point2.getWorldX();
+	double difY = point1.getWorldY() - point2.getWorldY();
+	double difZ = point1.getWorldZ() - point2.getWorldZ();
+	double sumXYZ = pow(difX, 2) + pow(difY, 2) + pow(difZ, 2);
+	return sqrt(sumXYZ);
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 }
 
 myPoint myPerson::calculateMidpoint(myPoint point1, myPoint point2) { //order of params doesn't matter

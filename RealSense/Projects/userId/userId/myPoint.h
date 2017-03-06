@@ -23,6 +23,16 @@ class myPoint {
 		double getImageY() { return imageY; }
 		
 		void setWorldZ(double);
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+		
+		void setWorldZ(double);
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+>>>>>>> 6290029ecbffa7d05b69862bffc0e37afe94df8f
 };
 
 void myPoint::updateValues(double newWorldX, double newWorldY, double newWorldZ, double newImageX, double newImageY) {
@@ -33,10 +43,25 @@ void myPoint::updateValues(double newWorldX, double newWorldY, double newWorldZ,
 	imageY = newImageY;
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+>>>>>>> 6290029ecbffa7d05b69862bffc0e37afe94df8f
 void myPoint::setWorldZ(double newWorldZ) {
 	worldZ = newWorldZ;
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
+>>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+>>>>>>> 6290029ecbffa7d05b69862bffc0e37afe94df8f
 void myPoint::printPoint() {
 	printf("   World: (%.2f, %.2f, %.2f)\n", worldX, worldY, worldZ);
 	printf("                               Image: (%.2f, %.2f)\n", imageX, imageY);

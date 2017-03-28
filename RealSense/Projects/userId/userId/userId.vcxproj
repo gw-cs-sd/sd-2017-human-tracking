@@ -115,10 +115,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="circleBuffer.h" />
-<<<<<<< HEAD
     <ClInclude Include="myLogging.h" />
-=======
->>>>>>> 6290029ecbffa7d05b69862bffc0e37afe94df8f
     <ClInclude Include="myPerson.h" />
     <ClInclude Include="myPoint.h" />
   </ItemGroup>

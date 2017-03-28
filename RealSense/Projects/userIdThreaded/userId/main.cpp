@@ -15,6 +15,7 @@
 #include <assert.h>
 #include "myPerson.h"
 #include "myLogging.h"
+#include "myBuffer.h"
 
 /* Required for ouputting data to file */
 #include <iostream>
@@ -55,9 +56,14 @@ ofstream rightArmLog;
 /* Global variables for the table */
 HANDLE wHnd;    // Handle to write to the console.
 HANDLE rHnd;    // Handle to read from the console.
+HANDLE threadSuccess; //Handle to control output table thread
 int consoleWidth = 60;
 int consoleHeight = 20;
 vector<PXCPersonTrackingData::Person*> personsFound;
+myBuffer targetUserLocBuff; 
+int targetUserCurrID = 0;
+int targetUserMissingCount = 0;
+#define MAX_TARGET_MISSING_COUNT 100
 
 
 
@@ -71,6 +77,8 @@ void createOutputTable();
 void printTable(bool, double);
 void ErrorHandler(LPTSTR lpszFunction);
 DWORD WINAPI updateTable(LPVOID);
+boolean containsTargetUser(PXCPersonTrackingModule* personModule);
+boolean isTargetUserGone(PXCPersonTrackingModule* personModule);
 
 
 
@@ -175,6 +183,14 @@ int main(int argc, WCHAR* argv[]) {
 					if (sample->depth && !renderd.RenderFrame(sample->depth)) break;
 					if (sample->color && !renderc.RenderFrame(sample->color)) break;
 					pp->ReleaseFrame();
+					
+					//printf("no Person");
+
+					/* Target user already found, disappeared from FOV */
+					if (personsFound.size() > 0) {
+						isTargetUserGone(personModule); //increments personGoneCounter if necessary
+						(personsFound[0]) = NULL;
+					}
 					continue;
 				}
 
@@ -187,20 +203,16 @@ int main(int argc, WCHAR* argv[]) {
 					if (isInitialized == false) {
 						initializeTargetUser(personModule);
 						//printf("Still initializing user...\n");
-
 					}
 					/* Once target user initialized, update the torso height */
 					else {
-						if (numPeople == 0) { //target user disappeared
-							personsFound[0] = NULL;
+
+						updateTargetUser(personModule);
+						if (isNewUser(personModule)) {
+							/* Comparing people in FOV against target user */
+							comparePeopleInFOV(personModule, numPeople);
 						}
-						else {
-							updateTargetUser(personModule);
-							if (isNewUser(personModule)) {
-								/* Comparing people in FOV against target user */
-								comparePeopleInFOV(personModule, numPeople);
-							}
-						}
+					}
 
 
 						
@@ -208,11 +220,10 @@ int main(int argc, WCHAR* argv[]) {
 						//printToVectorLog(targetUser.getTorsoVector(),torsoLog);
 						//printToVectorLog(targetUser.getLeftArmVector(),leftArmLog);
 						//printToVectorLog(targetUser.getRightArmVector(),rightArmLog);
-						PXCPersonTrackingData::Person* personData = personModule->QueryOutput()->QueryPersonData(PXCPersonTrackingData::ACCESS_ORDER_BY_ID, 0);
+						//PXCPersonTrackingData::Person* personData = personModule->QueryOutput()->QueryPersonData(PXCPersonTrackingData::ACCESS_ORDER_BY_ID, 0);
 						//printToJointLog(convertPXCPersonToMyPerson(personData));
 
 
-					}
 				}
 			}
 
@@ -237,6 +248,7 @@ int main(int argc, WCHAR* argv[]) {
 	torsoLog.close();
 	leftArmLog.close();
 	rightArmLog.close();
+	CloseHandle(threadSuccess); //closes table output thread
 	return 0;
 }
 
@@ -247,7 +259,7 @@ int main(int argc, WCHAR* argv[]) {
 
 
 /* We should average our tracked joints over 5 seconds or something, removing outliers (median calculated values),
-initializing shouldn't occur in one frame*/
+initializing shouldn't occur in one frame */
 void initializeTargetUser(PXCPersonTrackingModule* personModule) {
 	/* Accesses the only person in camera's FOV, our target user */
 	PXCPersonTrackingData::Person* personData = personModule->QueryOutput()->QueryPersonData(PXCPersonTrackingData::ACCESS_ORDER_BY_ID, 0);
@@ -281,9 +293,9 @@ void initializeTargetUser(PXCPersonTrackingModule* personModule) {
 		isInitialized = true;
 
 		personsFound.push_back(personData); //puts first data into personsFound vector
+		targetUserLocBuff.add(centerMass);
 
 		/* Create thread to write values to the table */
-		HANDLE threadSuccess;
 		DWORD   dwThreadId;
 		threadSuccess = CreateThread(NULL, 0, updateTable, NULL, 0, &dwThreadId);
 
@@ -369,7 +381,8 @@ void updateTargetUser(PXCPersonTrackingModule* personModule) {
 
 		PXCPersonTrackingData::PersonTracking::PointCombined centerMass = personData->QueryTracking()->QueryCenterMass();
 		myPoint myCenterMass(centerMass.world.point.x, centerMass.world.point.y, centerMass.world.point.z, centerMass.image.point.x, centerMass.image.point.y);
-
+		
+		targetUserLocBuff.add(centerMass);
 		targetUser.updatePerson(head, shoulderLeft, shoulderRight, leftHand, rightHand, spineMid, myCenterMass);
 		//printf("median torsoHeight: %f\n", targetUser.getMedianTorsoHeight());
 		//printf("median leftArmLength: %f\n", targetUser.getMedianLeftArmLength());
@@ -474,7 +487,7 @@ DWORD WINAPI updateTable(LPVOID lpParam)
 	//printf("thread started...");
 	while (personsFound.size() > 0) {
 
-		Sleep(500); //runs every half second
+		Sleep(100); //runs every tenth second
 		printTable(true, 0.0); //prints all the persons in the table
 
 	}
@@ -483,34 +496,14 @@ DWORD WINAPI updateTable(LPVOID lpParam)
 
 void printTable(bool targetFound, double targetUserVal) {
 
-	//need to set cursor position before writing to screen
-	/*if (targetFound == false) {
-		COORD cursorPos = { 2, 1 };
-		SetConsoleCursorPosition(wHnd, cursorPos);
-		printf("TargetUser:    N/A");
-	}
-	else {
-		COORD cursorPos = { 2, 1 };
-		SetConsoleCursorPosition(wHnd, cursorPos);
-		printf("TargetUser:    %.1f", targetUserVal);
-	}*/
-
-	/*if (personsFound.size() == 0) {  //code shouldn't ever run, but makes sense anyway
-		COORD cursorPos = { 2, 1 };
-		SetConsoleCursorPosition(wHnd, cursorPos);
-		printf("TargetUser:    N/A");
-	}*/
-	/*else if (personsFound.size() == 1) {
-		COORD cursorPos = { 2, 1 };
-		SetConsoleCursorPosition(wHnd, cursorPos);
-		printf("targetUser:   %f", personsFound[0]->QueryTracking()->QueryCenterMass().world.point.z);
-	}*/
-	//else { 
+	//need to set cursor position before writing to screen 
 	if (personsFound[0] == NULL) {
-		//target user disappeared, mark that one output table
+		//target user disappeared, mark that on output table
 		COORD cursorPos = { 2, 1 };
 		SetConsoleCursorPosition(wHnd, cursorPos);
-		printf("TargetUser:    N/A");
+		if (targetUserMissingCount >= MAX_TARGET_MISSING_COUNT) {
+			printf("TargetUser LKL  "); printLocation(targetUserLocBuff.getLastLocation());
+		}
 	}
 	else {
 		COORD cursorPos = { 2, 1 };
@@ -522,7 +515,6 @@ void printTable(bool targetFound, double targetUserVal) {
 			printf("person %d:     %.1f", personCount, personsFound[personCount]->QueryTracking()->QueryCenterMass().world.point.z);
 		}
 	}
-	
 }
 
 void ErrorHandler(LPTSTR lpszFunction)
@@ -557,4 +549,41 @@ void ErrorHandler(LPTSTR lpszFunction)
 
 	LocalFree(lpMsgBuf);
 	LocalFree(lpDisplayBuf);
+}
+
+/* Determines if targetUser is in the FOV */
+boolean containsTargetUser(PXCPersonTrackingModule* personModule) {
+
+	if (personModule == NULL) { //no users in FOV, therefore return false
+		return false;
+	}
+	int numPersons = personModule->QueryOutput()->QueryNumberOfPeople();
+	for (int i = 0; i < numPersons; i++) {
+
+		PXCPersonTrackingData::Person* personData = personModule->QueryOutput()->QueryPersonData(PXCPersonTrackingData::ACCESS_ORDER_BY_ID, i);
+
+		/* Finds the unique ID of each user */
+		int uniqueID = personData->QueryTracking()->QueryId();
+
+		if (uniqueID == targetUserCurrID) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/* Returns true if target user has been absent from FOV for a specified time */
+boolean isTargetUserGone(PXCPersonTrackingModule* personModule) {
+	
+	if (targetUserMissingCount >= 100) { //user has been gone for a while, return true
+		return true;
+	}
+	if (!containsTargetUser(personModule)) { //user is not in the current frame, increment counter
+		targetUserMissingCount++;
+	}
+	else {  //user is in the frame, reset counter
+		targetUserMissingCount = 0;
+	}
+
 }

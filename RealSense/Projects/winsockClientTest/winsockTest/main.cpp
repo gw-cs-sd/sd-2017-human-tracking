@@ -30,6 +30,9 @@ using namespace std;
 
 void printBuffer(char[], int);
 
+
+}
+
 int main()
 {
 	WSADATA wsaData;
@@ -195,29 +198,8 @@ void printBuffer(char bufPtr[], int numBytes) {
 	printf("\n");
 }
 
-/*	iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-if (iResult > 0 && count < 3) {
-printf("Bytes received: %d\n", iResult);
-printBuffer(recvbuf, iResult);
+
+makeRandomString() {
 
 
-
-//send another buffer
-/*getline(cin, inputString);
-const char* toSend = inputString.c_str();
-cout << inputString << endl;
-Converts string to c-style char array, then sends
-iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
-count++;
-if (iResult == SOCKET_ERROR) {
-printf("send failed with error: %d\n", WSAGetLastError());
-closesocket(ConnectSocket);
-WSACleanup();
 }
-/*
-if (strcmp(toSend, "quit") == 0) { //entered string to break loop
-break;
-}
-
-
-}*/

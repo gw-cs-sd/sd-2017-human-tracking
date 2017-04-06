@@ -9,24 +9,19 @@
 #define RATIO_EXP_DECAY 2.31 //experimentally generated value
 #define VAL_EXP_DECAY 0.15
 
-<<<<<<< HEAD
 #define INITIALIZE_COUNT_MAX 10 //number of iterations before target is initialized
 
 
 using namespace std; //needed for using the vector
 
-=======
-<<<<<<< HEAD
-#define INITIALIZE_COUNT_MAX 10 //number of iterations before target is initialized
-
-=======
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 int personCounter = 0; //global variable, increments for each new person constructed
 
 /* Function declarations */
 double findMedian(vector<double>);
 double findMedianForZ(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
+double convertToInches(double, double);
+
+
 
 /* Needed for logging purposes */
 char separator = ' ';
@@ -42,64 +37,36 @@ ofstream zAxisLog;*/
 
 class myPerson{
 	private:
-<<<<<<< HEAD
 		int initializeCount;
 		int personID; //unneccessary using my method
 		double shoulderDistance, leftArmLength, rightArmLength, torsoHeight; //raw shoulder values
 		//double shoulderDistanceSum, leftArmLengthSum, rightArmLengthSum, rightArmLengthSum; //continuosly updated distance values. Refined over multiple iterations
 
-=======
-<<<<<<< HEAD
-		int initializeCount;
-		int personID; //unneccessary using my method
-		double shoulderDistance, leftArmLength, rightArmLength, torsoHeight; //raw shoulder values
-		//double shoulderDistanceSum, leftArmLengthSum, rightArmLengthSum, rightArmLengthSum; //continuosly updated distance values. Refined over multiple iterations
-
-=======
-		int personID; //unneccessary using my method
-		double shoulderDistance, leftArmLength, rightArmLength, torsoHeight;
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 		myPoint JOINT_HEAD;
 		myPoint JOINT_SHOULDER_LEFT;
 		myPoint JOINT_SHOULDER_RIGHT;
 		myPoint JOINT_HAND_LEFT;
 		myPoint JOINT_HAND_RIGHT;
 		myPoint JOINT_SPINE_MID;
-<<<<<<< HEAD
 		myPoint JOINT_CENTER_MASS;
 
 		/* Vectors used for keeping track of user history */
 		vector<double> torsoHeightVector;
 		vector<double> leftArmVector;
 		vector<double> rightArmVector;
+		vector<double> shoulderVector;
 		//vector<double> zValues;
 
 	public: 
 		//Primary Constructor
 		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 				myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
-=======
-<<<<<<< HEAD
-		myPoint JOINT_CENTER_MASS;
-	public: 
-		//Primary Constructor
-		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
-				myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
-=======
-	public: 
-		//Primary Constructor
-		myPerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
-				myPoint lHand, myPoint rHand, myPoint midSpine) {
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			JOINT_HEAD = head;
 			JOINT_SHOULDER_LEFT = lShoulder;
 			JOINT_SHOULDER_RIGHT = rShoulder;
 			JOINT_HAND_LEFT = lHand;
 			JOINT_HAND_RIGHT = rHand;
 			JOINT_SPINE_MID = midSpine;
-<<<<<<< HEAD
 			JOINT_CENTER_MASS = cMass;
 			personID = personCounter++;
 
@@ -114,87 +81,33 @@ class myPerson{
 		//Default Constructor, sets all members to 0
 		myPerson() {
 			myPoint head, lShoulder, rShoulder, lHand, rHand, midSpine, cMass;
-=======
-<<<<<<< HEAD
-			JOINT_CENTER_MASS = cMass;
-=======
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
-			personID = personCounter++;
-			shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
-			leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT);
-			rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT);
-			torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
-<<<<<<< HEAD
-
-		}
-		//Default Constructor, sets all members to 0
-		myPerson() {
-			myPoint head, lShoulder, rShoulder, lHand, rHand, midSpine, cMass;
-=======
-		}
-		//Default Constructor, sets all members to 0
-		myPerson() {
-			myPoint head, lShoulder, rShoulder, lHand, rHand, midSpine;
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			JOINT_HEAD = head;
 			JOINT_SHOULDER_LEFT = lShoulder;
 			JOINT_SHOULDER_RIGHT = rShoulder;
 			JOINT_HAND_LEFT = lHand;
-<<<<<<< HEAD
 			JOINT_HAND_RIGHT = rHand;
 			JOINT_SPINE_MID = midSpine;
 			JOINT_CENTER_MASS = cMass;
-=======
-<<<<<<< HEAD
-			JOINT_HAND_RIGHT = rHand;
-			JOINT_SPINE_MID = midSpine;
-			JOINT_CENTER_MASS = cMass;
-=======
-			JOINT_HAND_RIGHT = rShoulder;
-			JOINT_SPINE_MID = midSpine;
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 			
 			personID = personCounter++;
 			shoulderDistance = 0;
 			leftArmLength = 0;
 			rightArmLength = 0;
-<<<<<<< HEAD
 			torsoHeight = 0;
 
-=======
-<<<<<<< HEAD
-			torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID, 0);
 
 		}
+		/* method declarations */
 		void printPerson();
 		void changeJoints(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
 		void updatePerson(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
 		double calculateDistance(myPoint, myPoint, double);
 		myPoint calculateMidpoint(myPoint, myPoint);
-
-=======
-			torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
-
-		}
-		//method declaration
-		void printPerson();
-		void changeJoints(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
-		void updatePerson(myPoint, myPoint, myPoint, myPoint, myPoint, myPoint, myPoint);
-		double calculateDistance(myPoint, myPoint, double);
-		myPoint calculateMidpoint(myPoint, myPoint);
-<<<<<<< HEAD
-		//accessor methods
-=======
-		myPoint getLeftShoulder() { return JOINT_SHOULDER_LEFT; }
-		myPoint getRightShoulder() { return JOINT_SHOULDER_RIGHT; }
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+		/* accessor methods */
 		double getLeftArmLength() { return leftArmLength; }
 		double getRightArmLength() { return rightArmLength; }
 		double getTorso() { return torsoHeight; }
+		double getShoulderDistance() { return shoulderDistance; }
 		int getInitializeCount() { return initializeCount; }
 	//	void initializeVectorLog(ofstream&);
 
@@ -212,17 +125,8 @@ class myPerson{
 		double getMedianTorsoHeight();
 		double getMedianLeftArmLength();
 		double getMedianRightArmLength();
+		double getMedianShoulderDistance();
 		double getArmLength();
-<<<<<<< HEAD
-		int getInitializeCount() { return initializeCount; }
-
-		myPoint getHead() { return JOINT_HEAD; }
-		myPoint getLeftShoulder() { return JOINT_SHOULDER_LEFT; }
-		myPoint getRightShoulder() { return JOINT_SHOULDER_RIGHT; }
-		myPoint getLeftHand() { return JOINT_HAND_LEFT; }
-		myPoint getRightHand() { return JOINT_HAND_RIGHT; }
-		myPoint getSpineMid() { return JOINT_SPINE_MID; }
-		myPoint getCenterMass() { return JOINT_CENTER_MASS; }
 };
 
 /* Changes the joints for a person and the respective distance calculations */
@@ -233,36 +137,6 @@ void myPerson::changeJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 	JOINT_HAND_LEFT = lHand;
 	JOINT_HAND_RIGHT = rHand;
 	JOINT_SPINE_MID = midSpine;
-	JOINT_CENTER_MASS = cMass;
-
-	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT, 0);
-	leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT, 0);
-	rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT, 0);
-	torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID, 0);
-
-
-
-}
-
-/* Updates the joints of the person, but recalculates */
-void myPerson::updatePerson(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
-=======
-};
-
-<<<<<<< HEAD
-/* Changes the joints for a person and the respective distance calculations */
-void myPerson::changeJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine, myPoint cMass) {
-=======
-void myPerson::updateJoints(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoint lHand, myPoint rHand, myPoint midSpine) {
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
-	JOINT_HEAD = head;
-	JOINT_SHOULDER_LEFT = lShoulder;
-	JOINT_SHOULDER_RIGHT = rShoulder;
-	JOINT_HAND_LEFT = lHand;
-	JOINT_HAND_RIGHT = rHand;
-	JOINT_SPINE_MID = midSpine;
-<<<<<<< HEAD
 	JOINT_CENTER_MASS = cMass;
 
 	double medianZ = findMedianForZ(head, lShoulder, rShoulder, lHand, rHand, midSpine, cMass);
@@ -295,19 +169,8 @@ void myPerson::updatePerson(myPoint head, myPoint lShoulder, myPoint rShoulder, 
 	leftArmVector.push_back(leftArmLength);
 	rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT, medianZ);
 	rightArmVector.push_back(rightArmLength);
-=======
-<<<<<<< HEAD
-	JOINT_CENTER_MASS = cMass;
-
-	/* Calculate the distances between joints, add to respective vector */
-=======
-
-	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT);
-	leftArmLength = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_HAND_LEFT);
-	rightArmLength = calculateDistance(JOINT_SHOULDER_RIGHT, JOINT_HAND_RIGHT);
-	torsoHeight = calculateDistance(JOINT_HEAD, JOINT_SPINE_MID);
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
+	shoulderDistance = calculateDistance(JOINT_SHOULDER_LEFT, JOINT_SHOULDER_RIGHT, medianZ);
+	shoulderVector.push_back(shoulderDistance);
 
 }
 
@@ -320,14 +183,7 @@ void myPerson::printPerson() {
 	printf("    JOINT_HAND_LEFT:      "); JOINT_HAND_LEFT.printPoint();
 	printf("    JOINT_HAND_RIGHT:     "); JOINT_HAND_RIGHT.printPoint();
 	printf("    JOINT_SPINE_MID:      "); JOINT_SPINE_MID.printPoint();
-<<<<<<< HEAD
 	printf("    JOINT_CENTER_MASS:    "); JOINT_CENTER_MASS.printPoint();
-=======
-<<<<<<< HEAD
-	printf("    JOINT_CENTER_MASS:    "); JOINT_CENTER_MASS.printPoint();
-=======
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 	printf("  Calculated Features:\n");
 	printf("    shoulderDistance:     %.2f\n", shoulderDistance);
 	printf("    leftArmLength:        %.2f\n", leftArmLength);
@@ -337,29 +193,18 @@ void myPerson::printPerson() {
 
 }
 
-<<<<<<< HEAD
 /* We are assumming all joints are on the same z plane. Will need to implement the trig here */
 double myPerson::calculateDistance(myPoint point1, myPoint point2, double medianZ) { //order of params doesn't matter
 	//double difX = point1.getWorldX() - point2.getWorldX();
 	//double difY = point1.getWorldY() - point2.getWorldY();
 	//double difZ = point1.getWorldZ() - point2.getWorldZ();
 	//double sumXYZ = pow(difX, 2) + pow(difY, 2) + pow(difZ, 2);
-	double difX = point1.getImageX() - point2.getImageX();
-	double difY = point1.getImageY() - point2.getImageY();
-	double sumXY = pow(difX, 2) + pow(difY, 2);
+	double difPixelsX = point1.getImageX() - point2.getImageX();
+	double difInchesX = convertToInches(difPixelsX, medianZ);
+	double difPixelsY = point1.getImageY() - point2.getImageY();
+	double difInchesY = convertToInches(difPixelsY, medianZ);
+	double sumXY = pow(difInchesX, 2) + pow(difInchesY, 2);
 	return sqrt(sumXY);
-=======
-<<<<<<< HEAD
-double myPerson::calculateDistance(myPoint point1, myPoint point2, double medianZ) { //order of params doesn't matter
-=======
-double myPerson::calculateDistance(myPoint point1, myPoint point2) { //order of params doesn't matter
->>>>>>> 89200231d664bd486c70963a59ef341cecbb976e
-	double difX = point1.getWorldX() - point2.getWorldX();
-	double difY = point1.getWorldY() - point2.getWorldY();
-	double difZ = point1.getWorldZ() - point2.getWorldZ();
-	double sumXYZ = pow(difX, 2) + pow(difY, 2) + pow(difZ, 2);
-	return sqrt(sumXYZ);
->>>>>>> c61d20a7a317b00e9ed3321e57ad78b80249b685
 }
 
 myPoint myPerson::calculateMidpoint(myPoint point1, myPoint point2) { //order of params doesn't matter
@@ -420,17 +265,26 @@ double myPerson::getMedianLeftArmLength() {
 double myPerson::getMedianRightArmLength() {
 	return findMedian(rightArmVector);
 }
+double myPerson::getMedianShoulderDistance() {
+	return findMedian(shoulderVector);
+}
 /* End of inherited functions needed for use in other classes. All ones below this are only used in myPerson.h */
 
 
-/* Compares person1 against person2. Order doesn't matter 
+/* Compares person1 against target user, assuming target user is second parameter
    returns value 100 if ratios are identical, with expnentially decreasing values as they get more different
    y  = 100e^(-2.31*x)
    x = | ratio1 - ratio 2 | */
-double compareTorsoRatio(myPerson person1, myPerson person2) {
+double compareTorsoRatio(myPerson person1, myPerson targetUser) {
 	
-	double ratio1 = person1.getTorso() / person1.getArmLength();
-	double ratio2 = person2.getTorso() / person2.getArmLength();
+	//double ratio1 = person1.getTorso() / person1.getArmLength();
+	//double ratio2 = person2.getTorso() / person2.getArmLength();
+
+	double ratio1 = person1.getTorso() / person1.getShoulderDistance();
+	//printf("person1Torso = %f person1Shoulder = %f\n", person1.getTorso(), person1.getShoulderDistance());
+	double ratio2 = targetUser.getMedianTorsoHeight() / targetUser.getMedianShoulderDistance();
+	//printf("targetUserTorso = %f targetUserShoulder = %f\n", targetUser.getMedianTorsoHeight(), targetUser.getMedianShoulderDistance());
+
 
 	double x = fabs(ratio1 - ratio2);
 
@@ -448,13 +302,16 @@ double compareTorsoRatio(myPerson person1, myPerson person2) {
    returns value between 0 and 100. 100 means that values are identical	*/
 double compareTorsoAndArmLengths(myPerson person1, myPerson person2) {
 
-	double arm1 = person1.getArmLength();
-	double arm2 = person2.getArmLength();
+	//double arm1 = person1.getArmLength();
+	//double arm2 = person2.getArmLength();
+	double shoulder1 = person1.getShoulderDistance();
+	double shoulder2 = person2.getShoulderDistance();
+
 
 	double torso1 = person1.getTorso();
 	double torso2 = person2.getTorso();
 
-	double x1 = fabs(arm1 - arm2);
+	double x1 = fabs(shoulder1 - shoulder2);
 	double neg = -1 * VAL_EXP_DECAY * x1;
 
 	double eToPower = pow(e, neg);
@@ -510,7 +367,7 @@ double findMedian(vector<double> vect) {
 
 	}
 	else { //vect contains odd # of values
-		int medianLoc = size / 2;
+		double medianLoc = size / 2;
 		//printf("medianLoc = %d", medianLoc);
 		medianLoc = floor(medianLoc);
 		//	printf("medianLoc = %d\n", medianLoc);
@@ -528,7 +385,7 @@ double findMedianForZ(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoin
 	zValues.push_back(rHand.getWorldZ());
 	zValues.push_back(spineMid.getWorldZ());
 	zValues.push_back(cMass.getWorldZ() * 1000); //for some reason, cMass is reported in different units
-	cout << "\n  Unsorted:  ";
+	/*cout << "\n  Unsorted:  ";
 	for (vector<double>::iterator it = zValues.begin(); it != zValues.end(); it++) {
 		cout << left << setprecision(4) << setw(VECTOR_WIDTH) << setfill(separator) << *it;
 	}
@@ -539,8 +396,18 @@ double findMedianForZ(myPoint head, myPoint lShoulder, myPoint rShoulder, myPoin
 		cout << left << setprecision(4) << setw(VECTOR_WIDTH) << setfill(separator) << *it;
 	}
 	cout << "     median = " << zValues[3];
-	cout << "\n";
+	cout << "\n";*/
 	return zValues[3];
+}
+
+
+/* Input distance between two points in image, uses Z axis distance to scale pixel difference to inch difference.
+   Created using experimentally generated values */
+double convertToInches(double zAxisInRSU, double pixelDistance) {
+
+	double inchesPerPixel = 0.000119 * zAxisInRSU + 0.00308;
+	return inchesPerPixel * pixelDistance;
+
 }
 
 

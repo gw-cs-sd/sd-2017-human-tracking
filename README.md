@@ -91,9 +91,12 @@ Brief video of the initialization phase occurring:
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/NyF7QaYOzA4/0.jpg)](http://www.youtube.com/watch?v=NyF7QaYOzA4)
 
 
+After this initialization phase, the main operation loop occurs. In this loop, the ATV is constantly locating the target user. When the ATV successfully locates the target user, it calculates the corresponding motor controls and relays that to the Arduino Mega for parsing. In our initial control scheme, these controls are simplified into going forwards, going backwards, turning left and turning right. These commands are packages into 1-byte commands and sent Serially. With a size of 1-byte, in the event of a temporary data transmission function the ATV will continue to run unhindered. The ATV will just miss a control signal, but continue correctly upon seing successive command signals. 
+
+
 `Motors/readSerialMotorTest/`
 
-Arduino is serially connected to the Windows computer, and instructions are sent in 1-byte increments. Requires an Arduino sketch to parse the bytes.
+Arduino is serially connected to the Windows computer, and instructions are sent in 1-byte increments. This Arduino sketch parses motor control signals sent from the ATV's onboard computer. These signals are parsed and the proper Pulse-Width-Modulations are outputted through 6 pins. A series of H bridges enables the DC motors to both go forwards and reverse, giving the ATV a very small turning radius.
 
 ## To run the code
 

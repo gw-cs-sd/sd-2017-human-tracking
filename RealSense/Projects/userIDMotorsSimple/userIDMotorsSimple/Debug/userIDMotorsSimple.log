@@ -1,5 +1,0 @@
-﻿  main.cpp
-c:\users\michael\desktop\senior-design\realsense\projects\useridmotorssimple\useridmotorssimple\myperson.h(309): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\michael\desktop\senior-design\realsense\projects\useridmotorssimple\useridmotorssimple\main.cpp(535): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  userIDMotorsSimple.vcxproj -> C:\Users\Michael\Desktop\Senior-Design\RealSense\Projects\userIDMotorsSimple\Debug\userIDMotorsSimple.exe
-  userIDMotorsSimple.vcxproj -> C:\Users\Michael\Desktop\Senior-Design\RealSense\Projects\userIDMotorsSimple\Debug\userIDMotorsSimple.pdb (Partial PDB)

@@ -86,6 +86,11 @@ printf("torsoHeight = %f\n", targetUserTorsoHeight);
 printf("shoulderWidth = %f\n", targetUserShoulderWidth);
 ```
 
+Brief video of the initialization phase occurring:
+
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/NyF7QaYOzA4/0.jpg)](http://www.youtube.com/watch?v=NyF7QaYOzA4)
+
+
 `Motors/readSerialMotorTest/`
 
 Arduino is serially connected to the Windows computer, and instructions are sent in 1-byte increments. Requires an Arduino sketch to parse the bytes.

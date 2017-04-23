@@ -2,29 +2,33 @@
 
 Automated Transport Vehicle
 
-ATV will be able to follow a user through various terrain, over obstacles like curbs and stairs, and keep its cargo area safe and flat. An onboard computer system will be able to identify and follow a designated target within the field of view of the attached Intel Realsense R200 camera.
+ATV will be able to follow a user through various terrain, over obstacles like curbs and stairs, and keep its cargo area safe and flat. An onboard computer will identify and follow a designated target within the field of view of the attached Intel Realsense R200 camera.
+
+## What's in this repository?
+
+The code that operates the RealSense R200 and the Arduino Mega are in this repository. All Realsense code is located int `Realsense\` while Arduino code is located in `Motors\`. The final RealSense project does have some Arduino code mixed in to enable it to communicate over the Serial connection.
 
 ## Current Progress
 
-`Realsense/Projects/UserIdRevised`
+A lot of time went in to getting the PersonTracking module into working condition. We inherited a mostly functional code-base from Intel, but very little correct documentation regarding the internals. Through a large amount of trial and error, we got this module into working condition and have iteratively added features. 
 
-So far I have accomplished:
+So far we have accomplished:
 * Gathering, processing and outputting joint information
 * Gathering, processing, storing location data into location buffer
-* Finished initialization phase where ATV learns about user features and joints
-* Fixed unreliable world easurements reported from the RealSense SDK
+* Finished initialization phase where ATV learns about target user features and joints
+* Fixed unreliable world measurements reported from the RealSense SDK
 * Implemented Socket-based networking to debug the robot during operation
 * Utilized 3 data inputs to figure out which person in FOV is the target user:
 	* Joint data
 	* Previous Locations
 	* userID
 * Finished data packaging and serial transmission to Arduino
-* When target user leaves FOV, the image is divided into regions and we only look for users to compare against target user in those reasons
+* When target user leaves FOV, the image is divided into regions. ATV only attempts to find TU in the last-known region
 
 
 ## Joint Data
 
-This took us a while to figure out. In case anyone would like to continue development using the RealSense person tracking module, check out our code. Despite what the SDK documentation says, only a few joints were confirmed working.
+In case anyone would like to continue development using the RealSense person tracking module, check out our code. Despite what the SDK documentation says, only a few joints were confirmed working. We only use the head, shoulders, spine and center of mass in calculations. 
 
 Realsense Joint |  Our Code
 ----------------|----------

@@ -6,7 +6,7 @@ ATV will be able to follow a user through various terrain, over obstacles like c
 
 ## What's in this repository?
 
-The code that operates the RealSense R200 and the Arduino Mega are in this repository. All Realsense code is located int `Realsense\` while Arduino code is located in `Motors\`. The final RealSense project does have some Arduino code mixed in to enable it to communicate over the Serial connection.
+The code that operates the RealSense R200 and the Arduino Mega are in this repository. All Realsense code is located in `/Realsense` while Arduino code is located in `/Motors`. The final RealSense project does have some Arduino code mixed in to enable it to communicate over the Serial connection.
 
 ## Current Progress
 
@@ -28,7 +28,7 @@ So far we have accomplished:
 
 ## Joint Data
 
-In case anyone would like to continue development using the RealSense person tracking module, check out our code. Despite what the SDK documentation says, only a few joints were confirmed working. We only use the head, shoulders, spine and center of mass in calculations. 
+In case anyone would like to continue development using the RealSense person tracking module, check out our code. Despite what the SDK documentation says, only a few joints were confirmed working. These joints are enumerated in the table below. We only use the head, shoulders, spine and center of mass in calculations. 
 
 Realsense Joint |  Our Code
 ----------------|----------
@@ -41,12 +41,54 @@ from personModule | JOINT_CENTER_MASS
 
 ## Combining Visual C++, Arduino and DC motors
 
-`RealSense/Projects/userIDMotorsSimple`
+`RealSense/userIDMotorsSimple`
+
+Code for controlling motors based on what the RealSense R200 sees. This is the current code operating on the ATV. First, the initialization phase occurs. 
+
+```c++
+while (!isInitialized) {
+	/* Waits until new frame is available and locks it for application processing */
+	sts = pp->AcquireFrame(false);
+
+	/* Render streams */
+	PXCCapture::Sample *sample = pp->QuerySample();
+
+	if (sample) {
+		PXCPersonTrackingModule* personModule = pp->QueryPersonTracking();
+
+		/* If no persons are visible, renders and releases current frame */
+		if (personModule == NULL) {
+			if (sample->depth && !renderd.RenderFrame(sample->depth)) break;
+			if (sample->color && !renderc.RenderFrame(sample->color)) break;
+			pp->ReleaseFrame();
+			continue;
+		}
+
+		int numPeople = personModule->QueryOutput()->QueryNumberOfPeople();
+
+		/* Found a person */
+		if (numPeople == 1) {
+			/* When this method is called enough times, it will return true and break initialization loop */
+			if (initializeTargetUser(personModule)) {
+				break;
+			}
+
+		}
+
+		/* Releases lock so pipeline can process next frame */
+		pp->ReleaseFrame();
+
+	}
+}
+
+printf("Target initialized: \n");
+printf("torsoHeight = %f\n", targetUserTorsoHeight);
+printf("shoulderWidth = %f\n", targetUserShoulderWidth);
+```
+
 `Motors/readSerialMotorTest/`
 
-Sample code for controlling motors based on what the RealSense R200 sees. 
-
-Arduino is serially connected to the Windows computer, and instructions are sent in 1-byte increments. Requires an Arduino sketch to parse the bytes, also availble in this repo.
+Arduino is serially connected to the Windows computer, and instructions are sent in 1-byte increments. Requires an Arduino sketch to parse the bytes.
 
 ## To run the code
 

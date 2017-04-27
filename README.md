@@ -98,6 +98,10 @@ After this initialization phase, the main operation loop occurs. In this loop, t
 
 Arduino is serially connected to the Windows computer, and instructions are sent in 1-byte increments. This Arduino sketch parses motor control signals sent from the ATV's onboard computer. These signals are parsed and the proper Pulse Width Modulation (PWM) signals are outputted. A series of H bridges enables the DC motors to both go forwards and backwards, giving the ATV a very small turning radius.
 
+## Special Cases
+
+The ATV has en easy time following the target user if this user always stays within its field of view
+
 ## To run the code
 
 1. Ensure the RealSense is plugged into the Windows computer. 
